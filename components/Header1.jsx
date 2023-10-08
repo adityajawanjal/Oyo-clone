@@ -1,18 +1,28 @@
+"use client";
 import Image from "next/image";
 import Block from "./Block";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Header1 = () => {
-  let auth;
-  if (typeof window !== "undefined") {
-    auth = Cookies.get("user");
-  }
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const key = Cookies.get("user");
+    if(key){
+      setAuth(true);
+      return;
+    }
+    setAuth(false);
+  }, [auth]);
+  
   const router = useRouter();
 
   const handleLogout = () => {
     Cookies.remove("user");
+    setAuth(false);
     router.push("/");
   };
   return (
@@ -41,12 +51,15 @@ const Header1 = () => {
             className=" w-10 h-10 rounded-full mr-5"
           />
           {auth ? (
-            <h3 className=" font-bold cursor-pointer" onClick={handleLogout}>
+            <h3
+              className=" font-bold cursor-pointer"
+              onClick={handleLogout}
+            >
               Logout
             </h3>
           ) : (
-            <Link href={"/login"}>
-              <h3 className=" font-bold">Login / Signup</h3>
+            <Link href={"/login"} className=" font-bold">
+              Login / Signup
             </Link>
           )}
         </div>

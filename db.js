@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const URI = "mongodb+srv://aditya:aditya54321@project.pko3x5w.mongodb.net/OYO";
+const URI = process.env.MONGO_URI;
 
 const connectDB = async () => {
   await mongoose.connect(URI, {
