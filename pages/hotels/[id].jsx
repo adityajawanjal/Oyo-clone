@@ -1,15 +1,22 @@
-
+"use client";
 import Head from "next/head";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const SingleHotel = ({ hotel }) => {
-  let auth ;
-  if(typeof window !== 'undefined'){
-    auth = Cookies.get('user');
-  }
- 
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const cookie = Cookies.get("user");
+    if (cookie) {
+      setAuth(true);
+      return;
+    }
+    setAuth(false);
+  }, []);
+
   return (
     <>
       <Head>
@@ -53,12 +60,18 @@ const SingleHotel = ({ hotel }) => {
               : ""}
           </ul>
           {auth ? (
-            <button className=" w-60 h-14 rounded-lg bg-red-400 my-5 text-lg">
-              Book Now
-            </button>
+            <Link href={`/payment/${hotel?._id}`}>
+              <button className=" w-60 h-14 rounded-lg bg-red-400 my-5 text-lg">
+                Book Now
+              </button>
+            </Link>
           ) : (
             <span className=" text-2xl">
-              Please <Link href={'/login'} className=" text-blue-500">Log in</Link> to get new Offers !
+              Please{" "}
+              <Link href={"/login"} className=" text-blue-500">
+                Log in
+              </Link>{" "}
+              to get new Offers !
             </span>
           )}
         </div>
